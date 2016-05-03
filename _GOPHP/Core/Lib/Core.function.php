@@ -10,13 +10,29 @@
 	function fetch_magic($str){
 		//path_info模式
 		if(config_get('url_type')==1){
+			
 			if(isset($_SERVER['PATH_INFO'])){	
 				$path = explode('/',trim($_SERVER['PATH_INFO'],'/'),3);
-				$name = array('m','c','a');
-				@$path = array_combine($name,$path);
-				return isset($path[$str]) ? $path[$str] : false;
+				//var_dump(count($path));
+				if(count($path)==3){
+					$arr['m'] = $path[0];
+					$arr['c'] = $path[1];
+					$arr['a']= $path[2];
+
+				}elseif(count($path)==2){
+					$arr['m'] = $path[0];
+					$arr['c'] = $path[1];
+					$arr['a'] = null;
+				}elseif(count($path)==1){
+					$arr['m'] =$path[0];
+					$arr['c'] = null;
+					$arr['a'] = null;
+				}else{
+					$arr = null;
+				}
+				return isset($arr[$str]) ? $arr[$str] : false;
 			}
-			return false;
+			
 
 		}
 		//兼容模式
@@ -43,7 +59,16 @@
  * @return [type]              [description]
  */
 	function config_get($config_name){
-		return isset($GLOBALS[$config_name]) ? $GLOBALS[$config_name] : false; 
+		if(is_string($config_name)){
+			return isset($GLOBALS[$config_name]) ? $GLOBALS[$config_name] : false; 
+	    } 
+	    if(is_array($config_name)){
+	    	$array = array();
+	    	foreach($config_name as $value){
+	    		 $array[$value] = $GLOBALS[$value]; 
+	    	}
+	    	return $array;
+	    }
 	}
 
 
@@ -61,19 +86,26 @@
 		if(substr($classname,0,4)=='Core'){
 			  if($str = str_replace('/\\/',DS,trim($classname,'\\'))){
 			    	$file = _GOPHP_PATH.$str.'.class.php';
-			    	var_dump('类文件的路径是'.$file);
+			    	
 			    	if(file_exists($file)){
 			    		include $file;
+			        }else{
+			        	die($file.'不存在core');
 			        }
 			  }
-		}else{
+		}
+		else{
 			//加载模块里面的核心类和自定义类
 			if($str = str_replace('\\',DS,trim($classname,'\\')));
 				   $file = APP_PATH.$str.'.class.php';
-				   var_dump('类文件的路径是'.$file);
+				   
 				   if(file_exists($file)){
 				   		include $file;
-				   }
+				   }elseif(substr($classname,-10,10)=='controller'){
+						die($file.'不存在');
+		           }else{
+			        	//die($file.'不存在nocore');
+			        }
 		}
 	}
 
@@ -200,4 +232,6 @@
 	    else
 	        return false;
 	}
+
+	
 
