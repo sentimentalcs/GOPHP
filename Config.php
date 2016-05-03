@@ -16,5 +16,8 @@
         //错误处理配置
           'error_reporting'     => 'E_ALL',
           'display_errors'      =>  true,
-          'url_type'            =>  1            //url类型默认为1,1=>pathinfo,2=>兼容模式   
+          'url_type'            =>  1   ,         //url类型默认为1,1=>pathinfo,2=>兼容模式   
+
+
+          'template_engine'     => 'smarty',  //默认为smarty，可选php
   );

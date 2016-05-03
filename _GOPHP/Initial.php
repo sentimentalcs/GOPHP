@@ -16,7 +16,6 @@
 	$module = fetch_magic('m') ? fetch_magic('m') : config_get('default_module') ;
 	$control= fetch_magic('c') ? fetch_magic('c') : config_get('default_controller');
 	$action = fetch_magic('a') ? fetch_magic('a') : config_get('default_action');
-
 	//自动装载控制器类和核心函数类
 	spl_autoload_register('autoloadClass');
 	$control_prefix = $module.'\\'.'Controller'.'\\'.$control;

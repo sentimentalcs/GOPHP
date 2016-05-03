@@ -46,6 +46,7 @@
 		return isset($GLOBALS[$config_name]) ? $GLOBALS[$config_name] : false; 
 	}
 
+
 /**
  * [autoloadClass 作为回调函数被被调用，自动加载带有命名空间的控制器类和核心类以及扩展类]
  * @param  [type] $classname [类名]
@@ -75,3 +76,128 @@
 				   }
 		}
 	}
+
+
+
+	/**
+	 * ajax_echo      用ajax输出函数
+	 */
+
+	function ajax_echo( $info )
+	{
+		if( !headers_sent() )
+		{
+			header("Content-Type:text/html;charset=utf-8");
+			header("Expires: Thu, 01 Jan 1970 00:00:01 GMT");
+			header("Cache-Control: no-cache, must-revalidate");
+			header("Pragma: no-cache");
+		}
+		
+		echo $info;
+	}
+
+/*
+	
+            	需要进一步处理
+	function info_page( $info , $title = '系统消息' )
+	{
+		if( is_ajax_request() )
+			$layout = 'ajax';
+		else
+			$layout = 'web';
+		$data['top_title'] = $data['title'] = $title;
+		$data['info'] = $info;	
+		render( $data , $layout , 'info' );
+		
+	}
+
+*/
+
+
+	/**
+	 * [is_ajax_request 判断是否是ajax请求]
+	 * @return boolean [description]
+	 */
+	function is_ajax_request()
+	{
+		$headers = apache_request_headers();
+		return (isset( $headers['X-Requested-With'] ) && ( $headers['X-Requested-With'] == 'XMLHttpRequest' )) || (isset( $headers['x-requested-with'] ) && ($headers['x-requested-with'] == 'XMLHttpRequest' ));
+	}
+
+	if (!function_exists('apache_request_headers')) 
+	{ 
+		function apache_request_headers()
+		{ 
+			foreach($_SERVER as $key=>$value)
+			{ 
+				if (substr($key,0,5)=="HTTP_")
+				{ 
+					$key=str_replace(" ","-",ucwords(strtolower(str_replace("_"," ",substr($key,5))))); 
+	                    $out[$key]=$value; 
+				}
+				else
+				{ 
+					$out[$key]=$value; 
+				}
+	       } 
+	       
+		   return $out; 
+	   } 
+	} 
+
+
+	/**
+	 * [is_mobile_request 判断是否是移动设备请求]
+	 * @return boolean [返回布尔值]
+	 */
+	function is_mobile_request()
+	{
+	    $_SERVER['ALL_HTTP'] = isset($_SERVER['ALL_HTTP']) ? $_SERVER['ALL_HTTP'] : '';
+	 
+	    $mobile_browser = '0';
+	 
+	    if(preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|iphone|ipad|ipod|android|xoom)/i', strtolower($_SERVER['HTTP_USER_AGENT'])))
+	        $mobile_browser++;
+	 
+	    if((isset($_SERVER['HTTP_ACCEPT'])) and (strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml') !== false))
+	        $mobile_browser++;
+	 
+	    if(isset($_SERVER['HTTP_X_WAP_PROFILE']))
+	        $mobile_browser++;
+	 
+	    if(isset($_SERVER['HTTP_PROFILE']))
+	        $mobile_browser++;
+	 
+	    $mobile_ua = strtolower(substr($_SERVER['HTTP_USER_AGENT'],0,4));
+	    $mobile_agents = array(
+	                        'w3c ','acs-','alav','alca','amoi','audi','avan','benq','bird','blac',
+	                        'blaz','brew','cell','cldc','cmd-','dang','doco','eric','hipt','inno',
+	                        'ipaq','java','jigs','kddi','keji','leno','lg-c','lg-d','lg-g','lge-',
+	                        'maui','maxo','midp','mits','mmef','mobi','mot-','moto','mwbp','nec-',
+	                        'newt','noki','oper','palm','pana','pant','phil','play','port','prox',
+	                        'qwap','sage','sams','sany','sch-','sec-','send','seri','sgh-','shar',
+	                        'sie-','siem','smal','smar','sony','sph-','symb','t-mo','teli','tim-',
+	                        'tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp',
+	                        'wapr','webc','winw','winw','xda','xda-'
+	                        );
+	 
+	    if(in_array($mobile_ua, $mobile_agents))
+	        $mobile_browser++;
+	 
+	    if(strpos(strtolower($_SERVER['ALL_HTTP']), 'operamini') !== false)
+	        $mobile_browser++;
+	 
+	    // Pre-final check to reset everything if the user is on Windows
+	    if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows') !== false)
+	        $mobile_browser=0;
+	 
+	    // But WP7 is also Windows, with a slightly different characteristic
+	    if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows phone') !== false)
+	        $mobile_browser++;
+	 
+	    if($mobile_browser>0)
+	        return true;
+	    else
+	        return false;
+	}
+
