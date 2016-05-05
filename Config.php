@@ -19,7 +19,7 @@
           'url_type'            =>  1   ,         //url类型默认为1,1=>pathinfo,2=>兼容模式   
 
           //以下为smaty模板配置
-          'template_engine'     => 'smarty',  //默认为smarty，可选php    
+          'template_engine'     => 'php',  //默认为smarty，可选php    
           'caching'             =>  true,     //是否开启模板缓存
           'cache_lifetime'      => -1,           //-1,0,或者具体的时间以秒计
           'left_delimiter'      => "{",       //左定界符
