@@ -4,33 +4,32 @@
 //2.兼容模式	  index.php?c=home&a=index
 /**
  * [fetch_magic description]
- * @param  [string] $str [要获取的模块，控制器，操作名]
+ * @param  [string] $str [要获取的模块，控制器，]
  * @return [mixed]      [值或者false]
  */
 	function fetch_magic($str){
 		//path_info模式
 		if(config_get('url_type')==1){
 			
-			if(isset($_SERVER['PATH_INFO'])){	
-				$path = explode('/',trim($_SERVER['PATH_INFO'],'/'),3);
+			if(isset($_SERVER['PATH_INFO'])){
+				$part = '';	
+				$path = explode('/',trim($_SERVER['PATH_INFO'],'/'));
 				//var_dump(count($path));
-				if(count($path)==3){
-					$arr['m'] = $path[0];
-					$arr['c'] = $path[1];
-					$arr['a']= $path[2];
-
-				}elseif(count($path)==2){
-					$arr['m'] = $path[0];
-					$arr['c'] = $path[1];
-					$arr['a'] = null;
-				}elseif(count($path)==1){
-					$arr['m'] =$path[0];
-					$arr['c'] = null;
-					$arr['a'] = null;
-				}else{
-					$arr = null;
+				switch ($str) {
+					case 'm':
+						$part = 0;
+						break;
+					case 'c':
+						$part = 1;
+						break;
+					case 'a':
+						$part = 2;
+						break;
+					case 'q':
+						$part = 3;
+						break;
 				}
-				return isset($arr[$str]) ? $arr[$str] : false;
+				return isset($path[$part]) ? $path[$part] : false;
 			}
 			
 
@@ -235,3 +234,4 @@
 
 	
 
+	

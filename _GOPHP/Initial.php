@@ -13,12 +13,14 @@
 	require APP_PATH.'Common'.DS.'Functions'.DS.'functions.php';
 	//初始化配置文件
 	config_set();
+
 	$module = fetch_magic('m') ? fetch_magic('m') : config_get('default_module') ;
 	$control= fetch_magic('c') ? fetch_magic('c') : config_get('default_controller');
 	$action = fetch_magic('a') ? fetch_magic('a') : config_get('default_action');
 	//自动装载控制器类和核心函数类
 	//var_dump(fetch_magic('c'));
 	spl_autoload_register('autoloadClass');
+	
 
 	$control_prefix = $module.'\\'.'Controller'.'\\'.$control.'controller';
 	//var_dump(fetch_magic('m'));

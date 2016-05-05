@@ -4,7 +4,7 @@
         //默认模块配置
           'default_module'      => 'home',
           'default_view'        => 'defautl',
-          'default_controller' => 'default',
+          'default_controller'  => 'default',
           'default_action'      => 'index',
           'default_language'    => 'zh_cn',
         //默认数据库配置
