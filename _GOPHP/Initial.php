@@ -15,8 +15,10 @@
 	require APP_PATH.'Common'.DS.'Functions'.DS.'functions.php';
 
 	config_set();
+	var_dump($GLOBALS);
 	$solder = new Core\Lib\Solder();
 	$solder -> run();
+
 
 	
 
